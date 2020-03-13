@@ -27,11 +27,7 @@ public class FireMage : MonoBehaviour
     public Sprite Icon4;
     public float spell4CD;
 
-    PlayerScript1 ps1;
-    PlayerScript2 ps2;
-    public CoolDownsSpellManager1 SCSM1;//reference to the ui
-    public CoolDownsSpellManager2 SCSM2;
-    bool Player1;
+    PlayerScript1 ps;
 
 
     bool onCdS1 = false;
@@ -50,69 +46,36 @@ public class FireMage : MonoBehaviour
         sr = gameObject.GetComponent<SpriteRenderer>();
         rb2D = gameObject.GetComponent<Rigidbody2D>();
         tf = gameObject.GetComponent<Transform>();
-        if (gameObject.tag.Equals("Player1"))
-        {
-            ps1 = gameObject.AddComponent<PlayerScript1>() as PlayerScript1;
-            Player1 = true;
-        }
-        else if (gameObject.tag.Equals("Player2"))
-        {
-            ps2 = gameObject.AddComponent<PlayerScript2>() as PlayerScript2;
-            Player1 = false;
-        }
+        ps = gameObject.AddComponent<PlayerScript1>() as PlayerScript1;
         sr.sortingLayerName = "forground";
-        SetUpSpellIcons();//see line 234
+        Sprite[] Icons = { Icon1, Icon2, Icon3, Icon4 };
+        ps.cDM.setSpellIcons(Icons);
     }
 
 
     void FixedUpdate()
     {
-
-        //action listener for abilities
-        if (Player1)
-        {
-
-            if (Input.GetKey(KeyCode.F) && !onCdS1 && ps1.canMove)
+        
+            if (Input.GetKey(KeyCode.F) && !onCdS1 && ps.canMove)
             {
                 StartCoroutine("Spell1");//see line 170
             }
 
-            if (Input.GetKey(KeyCode.G) && !onCdS2 && ps1.canMove)
+            if (Input.GetKey(KeyCode.G) && !onCdS2 && ps.canMove)
             {
                 StartCoroutine("Spell2");//see line 181
             }
 
-            if (Input.GetKey(KeyCode.H) && !onCdS3 && ps1.canMove)
+            if (Input.GetKey(KeyCode.H) && !onCdS3 && ps.canMove)
             {
                 StartCoroutine("Spell3");//see line 191
             }
 
-            if (Input.GetKey(KeyCode.J) && !onCdS4 && ps1.canMove)
+            if (Input.GetKey(KeyCode.J) && !onCdS4 && ps.canMove)
             {
                 StartCoroutine("Spell4");//see line 221
             }
-
-        }
-        else if (!Player1)
-        {
-            
-            if (Input.GetKey(KeyCode.Keypad4) && !onCdS1 && ps2.canMove)
-            {
-                StartCoroutine("Spell1");//see line 170
-            }
-            if (Input.GetKey(KeyCode.Keypad5) && !onCdS2 && ps2.canMove)
-            {
-                StartCoroutine("Spell2");//see line 181
-            }
-            if (Input.GetKey(KeyCode.Keypad6) && !onCdS3 && ps2.canMove)
-            {
-                StartCoroutine("Spell3");//see line 191
-            }
-            if (Input.GetKey(KeyCode.KeypadPlus) && !onCdS4 && ps2.canMove)
-            {
-                StartCoroutine("Spell4");//see line 221
-            }
-        }
+        
 
         //Setting the isWalking parameter of the animator for the character, with a tolerance of 0.5 velocity(i'm not sure about the unit but i think its unity-unit/sec)
         if ((rb2D.velocity.x > -0.5 && rb2D.velocity.x < 0.5) && (rb2D.velocity.y > -0.5 && rb2D.velocity.y < 0.5))
@@ -134,7 +97,7 @@ public class FireMage : MonoBehaviour
     {
         GameObject spell = Instantiate(PreS, tf.position, tf.rotation);
         spell.tag = tag;
-        if (Player1)
+        if (ps.PlayerIndex.Equals("1"))
         {
             spell.layer = 9;
         }
@@ -161,7 +124,7 @@ public class FireMage : MonoBehaviour
         {
             rbS.rotation = 0;
         }
-        if (!Player1)
+        if (!ps.PlayerIndex.Equals("1"))
         {
             rbS.rotation = 180 - rbS.rotation;
         }
@@ -172,11 +135,10 @@ public class FireMage : MonoBehaviour
     {
         castSpell(spell1);//see line 133
         onCdS1 = true;
-        if (Player1) { SCSM1.setIcon1OnCD(true); } else { SCSM2.setIcon1OnCD(true); }//setting the UI icon to greyed out.(see CoolDownsSpellManager1 line 50)
+        ps.cDM.setIcon1OnCD(true);
         yield return new WaitForSeconds(spell1CD);
         onCdS1 = false;
-        if (Player1) { SCSM1.setIcon1OnCD(false); } else { SCSM2.setIcon1OnCD(false); }
-
+        ps.cDM.setIcon1OnCD(false);
     }
 
     //Instantiates Spell 2 infront of the player facing in the walking direction. Setting the fitting icon2 (according to the PlayerTag) for the time of spell2CD to greyed out.
@@ -184,10 +146,10 @@ public class FireMage : MonoBehaviour
     {
         castSpell(spell2);//see line 133
         onCdS2 = true;
-        if (Player1) { SCSM1.setIcon2OnCD(true); } else { SCSM2.setIcon2OnCD(true); }//setting the UI icon to greyed out.(see CoolDownsSpellManager1 line 72)
+        ps.cDM.setIcon2OnCD(false);
         yield return new WaitForSeconds(spell2CD);
         onCdS2 = false;
-        if (Player1) { SCSM1.setIcon2OnCD(false); } else { SCSM2.setIcon2OnCD(false); }
+        ps.cDM.setIcon2OnCD(false);
     }
 
     //
@@ -202,13 +164,13 @@ public class FireMage : MonoBehaviour
         spell.transform.eulerAngles = new Vector3 (0, 0, rotationAngle + rb2D.rotation);
         spell.transform.parent = tf;
 
-        if (Player1) { ps1.castingSpell(dSM.dashTime); } else { ps2.castingSpell(dSM.dashTime); }
+        ps.castingSpell(dSM.dashTime);
         StartCoroutine(dash(dSM.dashspeed, dSM.dashTime, MoDirection));
-        
-        if (Player1) { SCSM1.setIcon3OnCD(true); } else { SCSM2.setIcon3OnCD(true); }
+
+        ps.cDM.setIcon3OnCD(false);
         yield return new WaitForSeconds(spell3CD);
         onCdS3 = false;
-        if (Player1) { SCSM1.setIcon3OnCD(false); } else { SCSM2.setIcon3OnCD(false); }
+        ps.cDM.setIcon3OnCD(false);
     }
 
     IEnumerator dash(float dashSpeed,float dashTime, Vector2 moDi)
@@ -230,27 +192,10 @@ public class FireMage : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
         onCdS4 = true;
-        if (Player1) { SCSM1.setIcon4OnCD(true); } else { SCSM2.setIcon4OnCD(true); }
+        ps.cDM.setIcon4OnCD(false);
         yield return new WaitForSeconds(spell4CD - 1.5f);
         onCdS4 = false;
-        if (Player1) { SCSM1.setIcon4OnCD(false); } else { SCSM2.setIcon4OnCD(false); }
+        ps.cDM.setIcon4OnCD(false);
     }
 
-    private void SetUpSpellIcons()
-    {
-        if (Player1)
-        {
-            SCSM1.setspell1(Icon1);
-            SCSM1.setspell2(Icon2);
-            SCSM1.setspell3(Icon3);
-            SCSM1.setspell4(Icon4);
-        }
-        else
-        {
-            SCSM2.setspell1(Icon1);
-            SCSM2.setspell2(Icon2);
-            SCSM2.setspell3(Icon3);
-            SCSM2.setspell4(Icon4);
-        }
-    }
 }

@@ -11,6 +11,8 @@ public class UIM : MonoBehaviour
     public Image Winner;
     public Sprite Player1Win;
     public Sprite Player2Win;
+    public CoolDownsSpellManager1 cDM1;
+    public CoolDownsSpellManager1 cDM2;
 
     void Start()
     {
@@ -41,14 +43,7 @@ public class UIM : MonoBehaviour
     public void enableEndM(string a)
     {
         disableHUD();
-        if (a.Equals("Player1"))
-        {
-            Winner.sprite = Player1Win;
-        }
-        else
-        {
-            Winner.sprite = Player2Win;
-        }
+        Winner.sprite = a.Equals("Player2") ? Player1Win : Player2Win;
         EndG.enabled = true;
         EndG.GetComponentInChildren<KOS>().enabled = true;
         pauseM.enabled = false;

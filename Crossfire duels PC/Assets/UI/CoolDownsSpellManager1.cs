@@ -15,8 +15,8 @@ public class CoolDownsSpellManager1 : MonoBehaviour
     private int onCD3 = 0;
     private int onCD4 = 0;
 
-    public Color grey;
-    public Color normal;
+    Color grey = Color.grey;
+    Color normal = Color.white;
 
     private void Awake()
     {
@@ -27,19 +27,28 @@ public class CoolDownsSpellManager1 : MonoBehaviour
         s4 = a[3];
     }
 
-    public void setspell1(Sprite s)
+
+    public void setSpellIcons(Sprite[] s)
+    {
+        setspell1(s[0]);
+        setspell2(s[1]);
+        setspell3(s[2]);
+        setspell4(s[3]); 
+    }
+
+    private void setspell1(Sprite s)
     {
         s1.sprite = s;
     }
-    public void setspell2(Sprite s)
+    private void setspell2(Sprite s)
     {
         s2.sprite = s;
     }
-    public void setspell3(Sprite s)
+    private void setspell3(Sprite s)
     {
         s3.sprite = s;
     }
-    public void setspell4(Sprite s)
+    private void setspell4(Sprite s)
     {
         s4.sprite = s;
     }

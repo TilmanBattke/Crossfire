@@ -9,6 +9,7 @@ public class BlueMage : MonoBehaviour
     Transform tf;
     SpriteRenderer sr;
     Animator anim;
+    UIM uIM;
 
     public GameObject spell1;
     public Sprite Icon1;
@@ -26,11 +27,7 @@ public class BlueMage : MonoBehaviour
     public Sprite Icon4;
     public float spell4CD;
 
-    PlayerScript1 ps1;
-    PlayerScript2 ps2;
-    public CoolDownsSpellManager1 SCSM1;
-    public CoolDownsSpellManager2 SCSM2;
-    bool Player1;
+    PlayerScript1 ps;
     
     
     bool onCdS1 = false;
@@ -42,68 +39,43 @@ public class BlueMage : MonoBehaviour
     
     private void Start()
     {
+        uIM = GameObject.FindObjectOfType<UIM>();
         anim = gameObject.GetComponent<Animator>();
         sr = gameObject.GetComponent<SpriteRenderer>();
         rb2D = gameObject.GetComponent<Rigidbody2D>();
         tf = gameObject.GetComponent<Transform>();
-        if (gameObject.tag.Equals("Player1"))
-        {
-            ps1 = gameObject.AddComponent<PlayerScript1>() as PlayerScript1;
-            Player1 = true;
-        }
-        else if (gameObject.tag.Equals("Player2"))
-        {
-            ps2 = gameObject.AddComponent<PlayerScript2>() as PlayerScript2;
-            Player1 = false;
-        }
+        ps = gameObject.AddComponent<PlayerScript1>() as PlayerScript1;
         sr.sortingLayerName = "forground";
-        SetUpSpellIcons();
+        Sprite[] sprites = { Icon1, Icon2, Icon3, Icon4 };
+        ps.cDM.setSpellIcons(sprites);
     }
 
     void FixedUpdate()
     {
-        if (Player1)
-        {
-            if (Input.GetKey(KeyCode.F) && !onCdS1 && ps1.canMove)
+        
+        
+            if (Input.GetKey(ps.InputS[0]) && !onCdS1 && ps.canMove)
             {
                 StartCoroutine("Spell1");
             }
 
-            if (Input.GetKey(KeyCode.G) && !onCdS2 && ps1.canMove)
+            if (Input.GetKey(ps.InputS[1]) && !onCdS2 && ps.canMove)
             {
                 StartCoroutine("Spell2");
             }
 
-            if (Input.GetKey(KeyCode.H) && !onCdS3 && ps1.canMove)
+            if (Input.GetKey(ps.InputS[2]) && !onCdS3 && ps.canMove)
             {
                 StartCoroutine("Spell3");
             }
 
-            if (Input.GetKey(KeyCode.J) && !onCdS4 && ps1.canMove)
+            if (Input.GetKey(ps.InputS[3]) && !onCdS4 && ps.canMove)
             {
                 StartCoroutine("Spell4");
             }
 
-        }
-        else
-        {
-            if (Input.GetKey(KeyCode.Keypad4) && !onCdS1 && ps2.canMove)
-            {
-                StartCoroutine("Spell1");
-            }
-            if (Input.GetKey(KeyCode.Keypad5) && !onCdS2 && ps2.canMove)
-            {
-                StartCoroutine("Spell2");
-            }
-            if (Input.GetKey(KeyCode.Keypad6) && !onCdS3 && ps2.canMove)
-            {
-                StartCoroutine("Spell3");
-            }
-            if (Input.GetKey(KeyCode.KeypadPlus) && !onCdS4 && ps2.canMove)
-            {
-                StartCoroutine("Spell4");
-            }
-        }
+        
+        
 
         if((rb2D.velocity.x > -0.5 && rb2D.velocity.x < 0.5)&&(rb2D.velocity.y > -0.5 && rb2D.velocity.y < 0.5))
         {
@@ -121,7 +93,7 @@ public class BlueMage : MonoBehaviour
     {
         GameObject spell = Instantiate(PreS, tf.position, tf.rotation);
         spell.tag = tag;
-        if (Player1)
+        if (ps.PlayerIndex.Equals("1"))
         {
             spell.layer = 9;
         }
@@ -148,7 +120,7 @@ public class BlueMage : MonoBehaviour
         {
             rbS.rotation = 0;
         }
-        if (!Player1){
+        if (!ps.PlayerIndex.Equals("1")){
             rbS.rotation = 180 - rbS.rotation;
         }
     }
@@ -160,10 +132,10 @@ public class BlueMage : MonoBehaviour
     {
         castSpell(spell1);
         onCdS1 = true;
-        if (Player1) { SCSM1.setIcon1OnCD(true); } else { SCSM2.setIcon1OnCD(true); }
+        ps.cDM.setIcon1OnCD(true);
         yield return new WaitForSeconds(spell1CD);
         onCdS1 = false;
-        if (Player1) { SCSM1.setIcon1OnCD(false); } else { SCSM2.setIcon1OnCD(false); }
+        ps.cDM.setIcon1OnCD(false);
     }
 
     IEnumerator Spell2()
@@ -173,7 +145,7 @@ public class BlueMage : MonoBehaviour
         spell.GetComponent<Transform>().eulerAngles += a;
         spell.GetComponent<Transform>().Translate(0, -10, 0);
         spell.tag = tag;
-        if (Player1)
+        if (ps.PlayerIndex.Equals("1"))
         {
             spell.layer = 9;
         }
@@ -182,10 +154,10 @@ public class BlueMage : MonoBehaviour
             spell.layer = 13;
         }
         onCdS2 = true;
-        if (Player1) { SCSM1.setIcon2OnCD(true); } else { SCSM2.setIcon2OnCD(true); }
+        ps.cDM.setIcon2OnCD(true);
         yield return new WaitForSeconds(spell2CD);
         onCdS2 = false;
-        if (Player1) { SCSM1.setIcon2OnCD(false); } else { SCSM2.setIcon2OnCD(false); }
+        ps.cDM.setIcon2OnCD(false);
     }
 
     IEnumerator Spell3()
@@ -195,20 +167,20 @@ public class BlueMage : MonoBehaviour
         spell.tag = tag;
 
         onCdS3 = true;
-        if (Player1) { SCSM1.setIcon3OnCD(true); } else { SCSM2.setIcon3OnCD(true); }
+        ps.cDM.setIcon3OnCD(true);
         yield return new WaitForSeconds(spell3CD);
         onCdS3 = false;
-        if (Player1) { SCSM1.setIcon3OnCD(false); } else { SCSM2.setIcon3OnCD(false); }
+        ps.cDM.setIcon3OnCD(false);
     }
 
     IEnumerator Spell4()
     {
         StartCoroutine(Ultimate());
         onCdS4 = true;
-        if (Player1) { SCSM1.setIcon4OnCD(true); } else { SCSM2.setIcon4OnCD(true); }
+        ps.cDM.setIcon4OnCD(true);
         yield return new WaitForSeconds(spell4CD);
         onCdS4 = false;
-        if (Player1) { SCSM1.setIcon4OnCD(false); } else { SCSM2.setIcon4OnCD(false); }
+        ps.cDM.setIcon4OnCD(false);
     }
 
     IEnumerator Ultimate()
@@ -224,21 +196,4 @@ public class BlueMage : MonoBehaviour
         spell3CD *= 2;
     }
 
-    private void SetUpSpellIcons()
-    {
-        if (Player1)
-        {
-            SCSM1.setspell1(Icon1);
-            SCSM1.setspell2(Icon2);
-            SCSM1.setspell3(Icon3);
-            SCSM1.setspell4(Icon4);
-        }
-        else
-        {
-            SCSM2.setspell1(Icon1);
-            SCSM2.setspell2(Icon2);
-            SCSM2.setspell3(Icon3);
-            SCSM2.setspell4(Icon4);
-        }
-    }
 }

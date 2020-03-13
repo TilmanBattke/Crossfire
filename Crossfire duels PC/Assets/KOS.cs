@@ -30,7 +30,7 @@ public class KOS : MonoBehaviour
     {
         for (int i = 10; i < 50;i++)
         {
-            rt.sizeDelta = Vector2.one * (600f - 600f / ((float)i/10f));
+            rt.sizeDelta = Vector2.one * (600f - 600f / ((float)i/10f));//TODO figure out whats this
             yield return new WaitForSecondsRealtime(0.01f);
         }
         kO.enabled = false;

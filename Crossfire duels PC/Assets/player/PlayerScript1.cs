@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerScript1 : MonoBehaviour
 {
+    
     public float moveSpeedNormal = 10f;
     float currentMoveSpeed;
     Rigidbody2D rb2D;
@@ -13,23 +14,50 @@ public class PlayerScript1 : MonoBehaviour
     public float startHealth = 100f;
     public float currentHealth;
     GSM gameSM;
-    CoolDownsSpellManager1 cDM;//reference to the UI elements
+    public CoolDownsSpellManager1 cDM;//reference to the UI elements
     SpriteRenderer sr;
     Color normal = new Color(1, 1, 1, 1);
     Color onFire = new Color(1, 0.2f, 0.2f, 1);
     Color stuned = new Color(0.2f, 0.2f, 1, 1);
+    public String PlayerIndex;
 
     public bool burning = false;
-    Slider HealthS1;
+    Slider HealthS;
+    String[] InputM = new String[4];
+    public String[] InputS = new String[4];
 
     public bool canMove;
 
 
     private void Awake()
     {
-        cDM = GameObject.FindObjectOfType<CoolDownsSpellManager1>();
+        PlayerIndex = "" + gameObject.tag[gameObject.tag.Length - 1];
+        if (PlayerIndex.Equals("1"))
+        {
+            InputM[0] = "w";
+            InputM[1] = "a";
+            InputM[2] = "s";
+            InputM[3] = "d";
+            InputS[0] = "f";
+            InputS[1] = "g";
+            InputS[2] = "h";
+            InputS[3] = "j";
+        }
+        else
+        {
+            InputM[0] = "up";
+            InputM[1] = "left";
+            InputM[2] = "down";
+            InputM[3] = "right";
+            InputS[0] = "[4]";
+            InputS[1] = "[5]";
+            InputS[2] = "[6]";
+            InputS[3] = "[+]";
+
+        }
+        cDM = GameObject.Find("CoolDowns" + PlayerIndex).GetComponent<CoolDownsSpellManager1>();
         gameSM = GameObject.Find("GameStateManager").GetComponent<GSM>();
-        HealthS1 = GameObject.Find("HealthSlider1").GetComponent<Slider>();
+        HealthS = GameObject.Find("HealthSlider" + PlayerIndex).GetComponent<Slider>();
         sr = gameObject.GetComponent<SpriteRenderer>();
         rb2D = gameObject.GetComponent<Rigidbody2D>();
         tf = gameObject.GetComponent<Transform>();
@@ -40,31 +68,31 @@ public class PlayerScript1 : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(Input.GetKey(KeyCode.W) && canMove)
-            {
+        if(Input.GetKey(InputM[0]) && canMove)
+        {
             rb2D.AddForce(Vector2.up * currentMoveSpeed * Time.deltaTime * 100f);
         }
-        if (Input.GetKey(KeyCode.S) && canMove)
+        if (Input.GetKey(InputM[1]) && canMove)
+        {
+            rb2D.AddForce(Vector2.left * currentMoveSpeed * Time.deltaTime * 100f);
+        }
+        if (Input.GetKey(InputM[2]) && canMove)
         {
             rb2D.AddForce(Vector2.down * currentMoveSpeed * Time.deltaTime * 100f);
         }
-        if (Input.GetKey(KeyCode.D) && canMove)
+        if (Input.GetKey(InputM[3]) && canMove)
         {
             rb2D.AddForce(Vector2.right * currentMoveSpeed * Time.deltaTime * 100f);
-        }
-        if (Input.GetKey(KeyCode.A) && canMove)
-        {
-            rb2D.AddForce(Vector2.left * currentMoveSpeed * Time.deltaTime * 100f);
         }
     }
 
     public void takeDamage(float amount)
     {
         currentHealth -= amount;//changing the current Health according to the imput value
-        HealthS1.value = currentHealth;//comunicating the number of hp to the health Bar
+        HealthS.value = currentHealth;//comunicating the number of hp to the health Bar
         if (currentHealth <= 0)
         {
-            gameSM.GameEnd("Player2");//see GSM line 84
+            gameSM.GameEnd("Player" + PlayerIndex);//see GSM line 84
         }
         if (currentHealth >= 100)
         {
