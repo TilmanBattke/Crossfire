@@ -44,7 +44,7 @@ public class HealSpellTest : MonoBehaviour
         else if (gameObject.tag.Equals("Player2"))
         {
 
-            ps2.castingSpell(castTime);
+            ps2.castingSpell(castTime);  
             for (int i = (int)(50f * castTime); i > 0; i--)
             {
                 ps2.takeDamage(-1*c);
