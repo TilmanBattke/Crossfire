@@ -30,21 +30,16 @@ public class Info : MonoBehaviour
         if(collision.gameObject.CompareTag("Wall side"))
         {
             rb2D.SetRotation(rb2D.rotation * -1);
-        }
-        if (collision.gameObject.CompareTag("Player2")&&tag.Equals("Player1"))
+        }else if (collision.gameObject.CompareTag("Background"))
         {
-            collision.gameObject.GetComponent<PlayerScript2>().takeDamage(dmg);
             Destroy(gameObject);
-        }
-        if (collision.gameObject.CompareTag("Player1")&&tag.Equals("Player2"))
+        }else if (!collision.gameObject.CompareTag(gameObject.tag))
         {
             collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg);
             Destroy(gameObject);
+
         }
-        if (collision.gameObject.CompareTag("Background"))
-        {
-            Destroy(gameObject);
-        }
+        
     }
 
     IEnumerator changeThroughSprites()
