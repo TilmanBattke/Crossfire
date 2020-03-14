@@ -28,15 +28,14 @@ public class UltimateS : MonoBehaviour
 
     private void Start()
     {
-        if (tag.Equals("Player1"))
+        PlayerScript1[] tmp = GameObject.FindObjectsOfType<PlayerScript1>();
+        foreach(PlayerScript1 ps in tmp)
         {
-            target = GameObject.FindObjectOfType<PlayerScript2>().gameObject.transform;//setting target to the transformer of the gameObject the script is attached to
+            if (!ps.tag.Equals(tag))
+            {
+                target = ps.gameObject.transform;
+            }
         }
-        else
-        {
-            target = GameObject.FindObjectOfType<PlayerScript1>().gameObject.transform;
-        }
-        Debug.Log(target.gameObject.tag);
         StartCoroutine(changeThroughSprites());
     }
 
@@ -97,20 +96,14 @@ public class UltimateS : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (collision.gameObject.CompareTag("Player2") && tag.Equals("Player1"))
+        else if(collision.gameObject.CompareTag("Background"))
         {
-            collision.gameObject.GetComponent<PlayerScript2>().takeDamage(dmg);//dealing damage to Player2(see PlayerScript2 line 61)
-            collision.gameObject.GetComponent<PlayerScript2>().BurnFor(burntime);//setting him to burn for burntime sec(see PlayerScript2 line 111)
             Destroy(gameObject);
         }
-        if (collision.gameObject.CompareTag("Player1") && tag.Equals("Player2"))
+        else
         {
-            collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg);//dealing damage to Player2(see PlayerScript1 line 61)
-            collision.gameObject.GetComponent<PlayerScript1>().BurnFor(burntime);//setting him to burn for burntime sec(see PlayerScript1 line 111)
-            Destroy(gameObject);
-        }
-        if (collision.gameObject.CompareTag("Background"))
-        {
+            collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg);
+            collision.gameObject.GetComponent<PlayerScript1>().BurnFor(burntime);
             Destroy(gameObject);
         }
     }

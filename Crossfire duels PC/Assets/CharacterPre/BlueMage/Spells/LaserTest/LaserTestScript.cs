@@ -20,17 +20,10 @@ public class LaserTestScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player2")&&tag.Equals("Player1"))
+        if(collision.gameObject.GetComponent<PlayerScript1>()!= null)
         {
-            collision.GetComponent<PlayerScript2>().stunedFor(stunTime);
-            GameObject.FindObjectOfType<PlayerScript1>().castingSpell(duration);
-            collision.GetComponent<PlayerScript2>().takeDamage(dmg);
-        }
-        if (collision.gameObject.CompareTag("Player1")&&tag.Equals("Player2"))
-        {
-            collision.GetComponent<PlayerScript1>().stunedFor(stunTime);
-            GameObject.FindObjectOfType<PlayerScript2>().castingSpell(duration);
-            collision.GetComponent<PlayerScript1>().takeDamage(dmg);
+            collision.gameObject.GetComponent<PlayerScript1>().stunedFor(stunTime);
+            collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg);
         }
     }
 

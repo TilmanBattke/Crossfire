@@ -56,22 +56,22 @@ public class FireMage : MonoBehaviour
     void FixedUpdate()
     {
         
-            if (Input.GetKey(KeyCode.F) && !onCdS1 && ps.canMove)
+            if (Input.GetKey(ps.InputS[0]) && !onCdS1 && ps.canMove)
             {
                 StartCoroutine("Spell1");//see line 170
             }
 
-            if (Input.GetKey(KeyCode.G) && !onCdS2 && ps.canMove)
+            if (Input.GetKey(ps.InputS[1]) && !onCdS2 && ps.canMove)
             {
                 StartCoroutine("Spell2");//see line 181
             }
 
-            if (Input.GetKey(KeyCode.H) && !onCdS3 && ps.canMove)
+            if (Input.GetKey(ps.InputS[2]) && !onCdS3 && ps.canMove)
             {
                 StartCoroutine("Spell3");//see line 191
             }
 
-            if (Input.GetKey(KeyCode.J) && !onCdS4 && ps.canMove)
+            if (Input.GetKey(ps.InputS[3]) && !onCdS4 && ps.canMove)
             {
                 StartCoroutine("Spell4");//see line 221
             }
@@ -146,7 +146,7 @@ public class FireMage : MonoBehaviour
     {
         castSpell(spell2);//see line 133
         onCdS2 = true;
-        ps.cDM.setIcon2OnCD(false);
+        ps.cDM.setIcon2OnCD(true);
         yield return new WaitForSeconds(spell2CD);
         onCdS2 = false;
         ps.cDM.setIcon2OnCD(false);
@@ -161,13 +161,13 @@ public class FireMage : MonoBehaviour
         float rotationAngle = Mathf.Atan2(rb2D.velocity.y, rb2D.velocity.x) * Mathf.Rad2Deg;
         Vector2 MoDirection = rb2D.velocity;
         
-        spell.transform.eulerAngles = new Vector3 (0, 0, rotationAngle + rb2D.rotation);
+        spell.transform.eulerAngles = new Vector3 (0, 0, rotationAngle);
         spell.transform.parent = tf;
 
         ps.castingSpell(dSM.dashTime);
         StartCoroutine(dash(dSM.dashspeed, dSM.dashTime, MoDirection));
 
-        ps.cDM.setIcon3OnCD(false);
+        ps.cDM.setIcon3OnCD(true);
         yield return new WaitForSeconds(spell3CD);
         onCdS3 = false;
         ps.cDM.setIcon3OnCD(false);
@@ -192,7 +192,7 @@ public class FireMage : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
         onCdS4 = true;
-        ps.cDM.setIcon4OnCD(false);
+        ps.cDM.setIcon4OnCD(true);
         yield return new WaitForSeconds(spell4CD - 1.5f);
         onCdS4 = false;
         ps.cDM.setIcon4OnCD(false);

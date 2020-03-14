@@ -28,32 +28,20 @@ public class FireBallS : MonoBehaviour
         {
             rb2D.SetRotation(rb2D.rotation * -1);;
         }
-        if (collision.gameObject.CompareTag("Player2") && tag.Equals("Player1"))
+        else if(collision.gameObject.CompareTag("Background"))
         {
-            if (collision.gameObject.GetComponent<PlayerScript2>().burning)
-            {
-                collision.gameObject.GetComponent<PlayerScript2>().takeDamage(dmg * 2);
-            }
-            else
-            {
-                collision.gameObject.GetComponent<PlayerScript2>().takeDamage(dmg);
-            }
             Destroy(gameObject);
         }
-        if (collision.gameObject.CompareTag("Player1") && tag.Equals("Player2"))
+        else
         {
             if (collision.gameObject.GetComponent<PlayerScript1>().burning)
             {
-                collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg * 2);
+                collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg*2);
             }
             else
             {
                 collision.gameObject.GetComponent<PlayerScript1>().takeDamage(dmg);
             }
-            Destroy(gameObject);
-        }
-        if (collision.gameObject.CompareTag("Background"))
-        {
             Destroy(gameObject);
         }
     }

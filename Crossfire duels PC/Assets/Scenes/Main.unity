@@ -2391,7 +2391,7 @@ MonoBehaviour:
   spell2: {fileID: 7947406825168359455, guid: 420bbc5245cde08479a547a9c7f40978, type: 3}
   Icon2: {fileID: 21300000, guid: 4e0704ca2c2778e44886de2c7a0419f0, type: 3}
   spell2CD: 8
-  spell3: {fileID: 1671169128}
+  spell3: {fileID: 2752543765598880058, guid: ec750c21a1c0ed74597809035a50d335, type: 3}
   Icon3: {fileID: 21300000, guid: d015876a89da9dc449d203fca1bf5304, type: 3}
   spell3CD: 10
   spell4: {fileID: 3169800493171559806, guid: 86b7860c293a32a41abe255cad23a989, type: 3}

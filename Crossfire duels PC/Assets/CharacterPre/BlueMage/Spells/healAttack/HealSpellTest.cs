@@ -6,8 +6,6 @@ public class HealSpellTest : MonoBehaviour
 {
     public float castTime;
     public float heal;
-    PlayerScript1 ps1;
-    PlayerScript2 ps2;
 
     public SpriteRenderer sR;
     public Sprite s1;
@@ -15,45 +13,26 @@ public class HealSpellTest : MonoBehaviour
     public Sprite s3;
     public Sprite s4;
 
-    private void Awake()
-    {
-        ps1 = GameObject.FindObjectOfType<PlayerScript1>();
-        ps2 = GameObject.FindObjectOfType<PlayerScript2>();
-    }
     void Start()
     {
-        Debug.Log(heal);
-        StartCoroutine("healScript");
         StartCoroutine(changeThroughSprites());
     }
 
-    IEnumerator healScript()
+    IEnumerator healScript(PlayerScript1 ps)
     {
         float c = heal / 50f / castTime;
-        if (gameObject.tag.Equals("Player1"))
-        {
 
-            ps1.castingSpell(castTime);
-            for (int i = (int)(50f * castTime); i > 0; i--)
-            {
-                ps1.takeDamage(-1*c);
-                yield return new WaitForSeconds(0.02f);
-            }
-            Destroy(gameObject);
-        }
-        else if (gameObject.tag.Equals("Player2"))
-        {
 
-            ps2.castingSpell(castTime);  
-            for (int i = (int)(50f * castTime); i > 0; i--)
-            {
-                ps2.takeDamage(-1*c);
-                yield return new WaitForSeconds(0.02f);
-            }
-            Destroy(gameObject);
+        ps.castingSpell(castTime);
+        for (int i = (int)(50f * castTime); i > 0; i--)
+        {
+            ps.takeDamage(-1*c);
+            yield return new WaitForSeconds(0.02f);
         }
         Destroy(gameObject);
     }
+
+    //Todo fix this pls cant get refrence to colliding object
 
     IEnumerator changeThroughSprites()
     {
