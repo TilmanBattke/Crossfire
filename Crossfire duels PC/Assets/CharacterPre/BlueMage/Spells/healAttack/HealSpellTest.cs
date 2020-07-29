@@ -6,6 +6,7 @@ public class HealSpellTest : MonoBehaviour
 {
     public float castTime;
     public float heal;
+    PlayerScript1 casterPS;
 
     public SpriteRenderer sR;
     public Sprite s1;
@@ -13,9 +14,26 @@ public class HealSpellTest : MonoBehaviour
     public Sprite s3;
     public Sprite s4;
 
+    private void Awake()
+    {
+        PlayerScript1[] pss = GameObject.FindObjectsOfType<PlayerScript1>();
+        foreach(PlayerScript1 ps in pss)
+        {
+            if (gameObject.GetComponent<CircleCollider2D>().bounds.Contains(ps.gameObject.transform.position)){
+                casterPS = ps;
+                Debug.Log(casterPS);
+            }
+        }
+    }
     void Start()
     {
         StartCoroutine(changeThroughSprites());
+        StartCoroutine(healScript(casterPS));
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Destroy(gameObject);
     }
 
     IEnumerator healScript(PlayerScript1 ps)
@@ -32,7 +50,6 @@ public class HealSpellTest : MonoBehaviour
         Destroy(gameObject);
     }
 
-    //Todo fix this pls cant get refrence to colliding object
 
     IEnumerator changeThroughSprites()
     {

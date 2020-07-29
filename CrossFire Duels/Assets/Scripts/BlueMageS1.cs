@@ -38,7 +38,7 @@ public class BlueMageS1 : MonoBehaviour
         }
         else if (!collision.gameObject.tag.Equals(tag))
         {
-            collision.gameObject.GetComponent<PlayerScript>().takeDamage(gameObject.GetComponent<SpellInfo>().dmg);
+            collision.gameObject.GetComponent<PlayerScript>().takeDamage(gameObject.GetComponent<SpellInfo>().damage);
             Destroy(gameObject);
         }
     }

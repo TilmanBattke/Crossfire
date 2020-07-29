@@ -24,7 +24,7 @@ public class BlueMageMobile : MonoBehaviour
         HUD = GameObject.FindObjectOfType<HudM>();
         ps = gameObject.GetComponent<PlayerScript>();
         HUD.setOnclickEvent(gameObject.tag, 1, CSpell1);
-        HUD.setSpellIcon(tag, 1, Spell1.GetComponent<SpellInfo>().Icon);
+        HUD.setSpellIcon(tag, 1, Spell1.GetComponent<SpellInfo>().icon);
 
     }
 
@@ -61,7 +61,7 @@ public class BlueMageMobile : MonoBehaviour
         tf.rotation = Quaternion.Euler(new Vector3(0, 0, rotation));
         OnCD[0] = true;
         HUD.setOnCd(tag, 1, true);
-        yield return new WaitForSeconds(Spell1.GetComponent<SpellInfo>().Cooldown);
+        yield return new WaitForSeconds(Spell1.GetComponent<SpellInfo>().coolDown);
         OnCD[0] = false;
         HUD.setOnCd(tag, 1, false);
     }
