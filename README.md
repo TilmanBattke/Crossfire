@@ -11,11 +11,11 @@ This game is the result of a 5 week group project in school. It is inspired by [
   </tr>
   <tr>
     <td>
-      <img src="Images/Controls.png" alt="Controls" width="300"/>
+      <img src="Images/Controls.png" alt="Controls" width="250"/>
     </td>
     <td>
-        <img src="Images/Crossfire.PNG" alt="Screenshot1" style="width:100%" width="300">
-        <img src="Images/Crossfire2.PNG" alt="Screenshot2" style="width:100%" width="300">
+        <img src="Images/Crossfire.PNG" alt="Screenshot1" style="width:100%" width="250">
+        <img src="Images/Crossfire2.PNG" alt="Screenshot2" style="width:100%" width="250">
     </td>
   </tr>
 </table> 
